@@ -5,6 +5,7 @@ import com.svlugovoy.books.repository.BookRepository;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,12 +30,12 @@ public class BookController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public void createBook(@RequestBody Book book) {
+    public void createBook(@Valid @RequestBody Book book) {
         bookRepository.save(book);
     }
 
     @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public void updateBook(@PathVariable String id, @RequestBody Book book) {
+    public void updateBook(@PathVariable String id, @Valid @RequestBody Book book) {
         bookRepository.save(book);
     }
 

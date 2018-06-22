@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "97bf47b3-4b29-4d96-b981-07dfb48b5823",
+		"_postman_id": "485b4480-0311-473c-8ea0-424f75d41632",
 		"name": "Books API",
 		"description": "Postman collection for demo project",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -16,7 +16,10 @@
 						"value": "application/json"
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8081/api/books",
 					"protocol": "http",
@@ -42,7 +45,10 @@
 						"value": "application/xml"
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8081/api/books",
 					"protocol": "http",
@@ -68,7 +74,10 @@
 						"value": "application/json"
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8081/api/books/1",
 					"protocol": "http",
@@ -95,7 +104,10 @@
 						"value": "application/xml"
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8081/api/books/1",
 					"protocol": "http",
@@ -209,6 +221,73 @@
 						"api",
 						"books",
 						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createBook_ValidationError",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"author\": \"\",\n        \"name\": \"ZZZ (5rd Edition) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY\",\n        \"published\": 3333\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/books",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateBook_ValidationError",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"id\": 3,\n        \"author\": null,\n        \"name\": \"Java Concurrency in Practice\",\n        \"published\": 2006\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/books/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"books",
+						"3"
 					]
 				}
 			},
