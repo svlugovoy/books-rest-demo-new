@@ -1,0 +1,7 @@
+mvn install spring-boot:run
+
+mvn install spring-boot:repackage
+java -jar name.jar
+
+
+
