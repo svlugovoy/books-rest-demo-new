@@ -1,8 +1,10 @@
 package com.svlugovoy.books.controller;
 
 import com.svlugovoy.books.domain.Book;
+import com.svlugovoy.books.exception.BookNotFound2Exception;
 import com.svlugovoy.books.repository.BookRepository;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,23 @@ public class BookController {
 //        return bookRepository.findById(Long.valueOf(id)).get();
 //    }
 
+//    @GetMapping(path = "/{id}",
+//            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
+//    public ResponseEntity<Book> findBookById(@PathVariable String id) {
+//
+//        int bookId = NumberUtils.toInt(id);
+//        if(bookId <= 0) {
+//            return ResponseEntity.badRequest().build(); //400
+//        }
+//
+//        Optional<Book> optional = bookRepository.findById((long) bookId);
+//        if (!optional.isPresent()) {
+//            return ResponseEntity.notFound().build(); //404
+//        }
+//
+//        return ResponseEntity.ok(optional.get()); //200
+//    }
+
     @GetMapping(path = "/{id}",
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Book> findBookById(@PathVariable String id) {
@@ -41,16 +60,14 @@ public class BookController {
             return ResponseEntity.badRequest().build(); //400
         }
 
-        Optional<Book> optional = bookRepository.findById((long) bookId);
-        if (!optional.isPresent()) {
-            return ResponseEntity.notFound().build(); //404
-        }
+        Book book = bookRepository.findById((long) bookId).orElseThrow(BookNotFound2Exception::new);
 
-        return ResponseEntity.ok(optional.get()); //200
+        return ResponseEntity.ok(book); //200
     }
 
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @ResponseStatus(HttpStatus.CREATED)
     public void createBook(@Valid @RequestBody Book book) {
         bookRepository.save(book);
     }
