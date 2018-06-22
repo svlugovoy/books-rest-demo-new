@@ -2,10 +2,12 @@ package com.svlugovoy.books.controller;
 
 import com.svlugovoy.books.domain.Book;
 import com.svlugovoy.books.exception.BookIdNotNumberException;
-import com.svlugovoy.books.exception.BookNotFound2Exception;
 import com.svlugovoy.books.exception.BookNotFoundException;
 import com.svlugovoy.books.repository.BookRepository;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
@@ -26,7 +27,7 @@ public class BookController {
     }
 
     @GetMapping
-    public List<Book> findBooks() {
+    public Iterable<Book> findBooks() {
         return bookRepository.findAll();
     }
 
@@ -72,7 +73,7 @@ public class BookController {
     public ResponseEntity<Book> findBookById(@PathVariable String id) {
 
         int bookId = NumberUtils.toInt(id);
-        if(bookId <= 0) {
+        if (bookId <= 0) {
             throw new BookIdNotNumberException(); //400
         }
 
@@ -96,5 +97,17 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable String id) {
         bookRepository.deleteById(Long.valueOf(id));
+    }
+
+    // /api/books/search?page=0&size=5
+    @GetMapping(path = "/search")
+    public ResponseEntity<Page<Book>> searchBooks(Pageable pageable) {
+
+        Page<Book> books = bookRepository.findAll(pageable);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", String.valueOf(bookRepository.count()));
+
+        return ResponseEntity.ok().headers(headers).body(books);
     }
 }
