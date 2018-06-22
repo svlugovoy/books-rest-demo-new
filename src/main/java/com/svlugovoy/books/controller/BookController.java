@@ -1,7 +1,9 @@
 package com.svlugovoy.books.controller;
 
 import com.svlugovoy.books.domain.Book;
+import com.svlugovoy.books.exception.BookIdNotNumberException;
 import com.svlugovoy.books.exception.BookNotFound2Exception;
+import com.svlugovoy.books.exception.BookNotFoundException;
 import com.svlugovoy.books.repository.BookRepository;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.http.HttpStatus;
@@ -51,16 +53,30 @@ public class BookController {
 //        return ResponseEntity.ok(optional.get()); //200
 //    }
 
+//    @GetMapping(path = "/{id}",
+//            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
+//    public ResponseEntity<Book> findBookById(@PathVariable String id) {
+//
+//        int bookId = NumberUtils.toInt(id);
+//        if(bookId <= 0) {
+//            return ResponseEntity.badRequest().build(); //400
+//        }
+//
+//        Book book = bookRepository.findById((long) bookId).orElseThrow(BookNotFound2Exception::new);
+//
+//        return ResponseEntity.ok(book); //200
+//    }
+
     @GetMapping(path = "/{id}",
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Book> findBookById(@PathVariable String id) {
 
         int bookId = NumberUtils.toInt(id);
         if(bookId <= 0) {
-            return ResponseEntity.badRequest().build(); //400
+            throw new BookIdNotNumberException(); //400
         }
 
-        Book book = bookRepository.findById((long) bookId).orElseThrow(BookNotFound2Exception::new);
+        Book book = bookRepository.findById((long) bookId).orElseThrow(BookNotFoundException::new);
 
         return ResponseEntity.ok(book); //200
     }

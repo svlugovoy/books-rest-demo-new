@@ -136,6 +136,74 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "findBookById_404_my_header",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "my_header",
+								"value": "qwerty"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/books/10122",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"books",
+								"10122"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findBookById_400_my_header",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "my_header",
+								"value": "qwerty"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/books/abc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"books",
+								"abc"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
