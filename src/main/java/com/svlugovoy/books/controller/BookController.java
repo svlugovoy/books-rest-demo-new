@@ -1,10 +1,16 @@
 package com.svlugovoy.books.controller;
 
 import com.svlugovoy.books.domain.Book;
+import com.svlugovoy.books.event.BookSavedEvent;
 import com.svlugovoy.books.exception.BookIdNotNumberException;
 import com.svlugovoy.books.exception.BookNotFoundException;
+import com.svlugovoy.books.monitoring.metric.BookMetricsBean;
+import com.svlugovoy.books.monitoring.metric.BookMetricsBeanEvent;
 import com.svlugovoy.books.repository.BookRepository;
+import io.micrometer.core.annotation.Timed;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -14,11 +20,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
+
+    @Autowired
+    private BookMetricsBean metricsBean;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     private final BookRepository bookRepository;
 
@@ -26,6 +37,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
+    @Timed("books.findAll")
     @GetMapping
     public Iterable<Book> findBooks() {
         return bookRepository.findAll();
@@ -82,11 +94,12 @@ public class BookController {
         return ResponseEntity.ok(book); //200
     }
 
-
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public void createBook(@Valid @RequestBody Book book) {
         bookRepository.save(book);
+        eventPublisher.publishEvent(new BookSavedEvent(this, book));
+        metricsBean.onSaveBook(book);
     }
 
     @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
