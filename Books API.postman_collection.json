@@ -1030,6 +1030,41 @@
 			]
 		},
 		{
+			"name": "swagger",
+			"description": null,
+			"item": [
+				{
+					"name": "swagger",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8081/v2/api-docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v2",
+								"api-docs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "findAllBooks",
 			"request": {
 				"method": "GET",

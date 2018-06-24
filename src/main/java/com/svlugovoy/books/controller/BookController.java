@@ -8,6 +8,10 @@ import com.svlugovoy.books.monitoring.metric.BookMetricsBean;
 import com.svlugovoy.books.monitoring.metric.BookMetricsBeanEvent;
 import com.svlugovoy.books.repository.BookRepository;
 import io.micrometer.core.annotation.Timed;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -40,6 +44,7 @@ public class BookController {
 
     @Timed("books.findAll")
     @GetMapping
+    @ApiOperation(notes = "For papination use /search?page=0&size=5", value = "Returns All books")
     public Iterable<Book> findBooks() {
         return bookRepository.findAll();
     }
@@ -81,9 +86,14 @@ public class BookController {
 //        return ResponseEntity.ok(book); //200
 //    }
 
-    @GetMapping(path = "/{id}",
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Book> findBookById(@PathVariable String id) {
+    @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @ApiOperation(notes = "Not Cacheable here", value = "Returns book by id")
+    @ApiResponses({@ApiResponse(code = 200, message = "Book is found"),
+            @ApiResponse(code = 400, message = "Bad request, id format incorrect"),
+            @ApiResponse(code = 404, message = "Book is not found, non-existing id")})
+    public ResponseEntity<Book> findBookById(
+            @ApiParam(example = "1", required = true, name = "id", value = "Unique book identifier")
+            @PathVariable String id) {
 
         int bookId = NumberUtils.toInt(id);
         if (bookId <= 0) {
