@@ -3,7 +3,9 @@ mvn install spring-boot:run
 mvn install spring-boot:repackage
 java -jar name.jar
 
-http://localhost:8080/v2/api-docs
+http://localhost:8081/v2/api-docs
+
+http://localhost:8081/swagger-ui.html
 
 
 
