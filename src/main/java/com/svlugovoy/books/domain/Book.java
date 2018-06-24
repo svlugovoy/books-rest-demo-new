@@ -37,5 +37,6 @@ public class Book {
     @Max(value = 2020, message = "Not supported value: > then {value}")
     private int year;
 
+    private boolean rented;
 
 }

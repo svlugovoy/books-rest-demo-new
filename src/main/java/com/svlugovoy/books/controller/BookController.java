@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
@@ -123,5 +124,16 @@ public class BookController {
         headers.add("X-Total-Count", String.valueOf(bookRepository.count()));
 
         return ResponseEntity.ok().headers(headers).body(books);
+    }
+
+    @PutMapping("/rent/{id}")
+    public ResponseEntity<Void> rentBook(@PathVariable String id) {
+        Optional<Book> optional = bookRepository.findById(Long.valueOf(id));
+
+        optional.ifPresent(book -> {
+            book.setRented(true);
+            bookRepository.save(book);
+        });
+        return ResponseEntity.ok().build();
     }
 }
