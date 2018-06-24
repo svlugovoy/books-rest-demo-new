@@ -96,10 +96,11 @@ public class BookController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public void createBook(@Valid @RequestBody Book book) {
-        bookRepository.save(book);
+    public Book createBook(@Valid @RequestBody Book book) {
+        Book savedBook = bookRepository.save(book);
         eventPublisher.publishEvent(new BookSavedEvent(this, book));
         metricsBean.onSaveBook(book);
+        return savedBook;
     }
 
     @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
